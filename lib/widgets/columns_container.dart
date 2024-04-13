@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:guess_the_number/widgets/column_data.dart';
 
 class ColumnsContainer extends StatelessWidget {
@@ -15,15 +16,13 @@ class ColumnsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ColumnData("Mayor que", _tryHigher),
-          ColumnData("Menor que", _tryLower),
-          ColumnData("Historial", _history, win: win),
-        ],
-      ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: ColumnData("Mayor que", _tryHigher)),
+        Expanded(child: ColumnData("Menor que", _tryLower)),
+        Expanded(child: ColumnData("Historial", _history, win: win)),
+      ],
     );
   }
 }

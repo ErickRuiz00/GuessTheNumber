@@ -17,30 +17,32 @@ class ColumnData extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(5),
       child: Container(
-        height: 350,
+        height: 400,
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.black,
             width: 2
           ),
         ),
-        child: Column(
-          children: [
-            Text(columnTitle),
-
-            // Columns "Mayor que" - "Menor que"
-            if(win == null)  
-              for(int number in numbers)
-                Text(number.toString())
-
-            // Column "Historial"
-            else
-              for(int i = 0; i < numbers.length; i++)
-                  Text(
-                    numbers[i].toString(), 
-                    style: TextStyle(color: win![i]? Colors.green : Colors.red),
-                  )        
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Text(columnTitle),
+          
+              // Columns "Mayor que" - "Menor que"
+              if(win == null)  
+                for(int number in numbers)
+                  Text(number.toString())
+          
+              // Column "Historial"
+              else
+                for(int i = 0; i < numbers.length; i++)
+                    Text(
+                      numbers[i].toString(), 
+                      style: TextStyle(color: win![i]? Colors.green : Colors.red),
+                    )        
+            ],
+          ),
         ),
       ),
     );
