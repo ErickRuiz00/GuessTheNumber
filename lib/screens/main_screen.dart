@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:guess_the_number/services/services.dart';
 import 'package:guess_the_number/widgets/columns_container.dart';
 import 'package:guess_the_number/widgets/custom_button.dart';
 import 'package:guess_the_number/widgets/custom_slider.dart';
@@ -13,7 +16,80 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  List<int> _tryLower = [], _tryHigher = [], _history = [];
+  late int _targetNumber;
+  late int _userGuess, _userTries, _currentLimit;
+  final List<int> _tries = [5, 8, 15, 25], _levelLimits = [10, 20, 100, 1000]; 
+  final List<String> levels = ["Fácil", "Normal", "Difícil", "Extremo"];
+  late String _currentLevelTitle;
+  late double _currentLevel;
+  late List<int> _tryLower, _tryHigher, _history;
+  final fieldInputNumber = TextEditingController(); 
+  late List<bool> win;
+
+  void _initializeGame({
+    required int limit,
+    required int tries,
+    required String levelTitle,
+    required double level
+  }){
+    _targetNumber = Random().nextInt(limit) + 1;
+    _currentLimit = limit;
+    _userTries = tries;
+    _currentLevelTitle = levelTitle;
+    _currentLevel = level;
+    _tryLower = [];
+    _tryHigher = [];
+  }
+
+  int _checkWinner(){
+    // Win
+    if(_userGuess == _targetNumber){
+      win.add(true);
+      return 1;
+    }
+
+    // Add to corresponding column
+    _userGuess < _targetNumber? _tryHigher.add(_userGuess) : _tryLower.add(_userGuess);
+
+    // Lose
+    if(_userTries == 0){
+      win.add(false);
+      return -1;
+    } 
+
+    // Keep trying
+    return 0;
+  }
+
+  void _userTry(String value){
+    _userGuess = int.parse(value);
+
+    fieldInputNumber.clear();
+
+    if(!isValidNumber(number: _userGuess, limit: _currentLimit)){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Intenta un número entre [1-$_currentLimit]")
+        )
+      );
+    }
+
+    setState(() {
+      _userTries--;
+    });
+
+    final int result = _checkWinner();      
+
+    if(result != 0){
+      _history.add(_targetNumber);
+      _initializeGame(
+        limit: _currentLimit,
+        tries: _tries[_currentLevel.toInt()],
+        levelTitle: _currentLevelTitle,
+        level: _currentLevel
+      );
+    }
+  }
 
  
   @override
@@ -24,9 +100,13 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: Column(
         children: [
+          Container(
+            margin: const EdgeInsets.all(10),
+            child: InputNumber(_userTry, fieldInputNumber),
+          ),
           Text("Intentos restantes: "),
-          InputNumber(),
           CustomSlider(),
+          const SizedBox(height: 30),
           ColumnsContainer(tryHigher: _tryHigher, tryLower: _tryLower, history: _history)          
         ],
       ),
