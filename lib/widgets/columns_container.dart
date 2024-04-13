@@ -19,8 +19,8 @@ class ColumnsContainer extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ColumnData("Menor que", _tryHigher),
-          ColumnData("Mayor que", _tryLower),
+          ColumnData("Mayor que", _tryHigher),
+          ColumnData("Menor que", _tryLower),
           ColumnData("Historial", _history),
         ],
       ),

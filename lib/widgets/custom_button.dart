@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({
-    super.key,
+  final VoidCallback? onPressed;
+
+  const CustomButton(
+    this.onPressed,{
+    super.key, 
   });
 
   @override
@@ -11,8 +14,7 @@ class CustomButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         FloatingActionButton(
-          onPressed: (){
-          },
+          onPressed: onPressed,
           child: const Icon(Icons.refresh_rounded),
           ),
       ],

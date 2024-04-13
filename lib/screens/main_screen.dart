@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:guess_the_number/services/services.dart';
 import 'package:guess_the_number/widgets/columns_container.dart';
 import 'package:guess_the_number/widgets/custom_button.dart';
 import 'package:guess_the_number/widgets/custom_slider.dart';
@@ -26,6 +25,20 @@ class _MainScreenState extends State<MainScreen> {
   final fieldInputNumber = TextEditingController(); 
   late List<bool> win;
 
+   @override
+  void initState(){
+    super.initState();
+    _initializeGame(
+      limit: _levelLimits[0], 
+      tries: _tries[0], 
+      levelTitle: levels[0],
+      level: 0
+    );
+
+    _history = [];
+    win = [];
+  }
+
   void _initializeGame({
     required int limit,
     required int tries,
@@ -40,6 +53,9 @@ class _MainScreenState extends State<MainScreen> {
     _tryLower = [];
     _tryHigher = [];
   }
+
+  bool isValidNumber({required int number, required int limit}) => number > 0 && number <= limit; 
+
 
   int _checkWinner(){
     // Win
@@ -72,6 +88,7 @@ class _MainScreenState extends State<MainScreen> {
           content: Text("Intenta un número entre [1-$_currentLimit]")
         )
       );
+      return;
     }
 
     setState(() {
@@ -104,13 +121,41 @@ class _MainScreenState extends State<MainScreen> {
             margin: const EdgeInsets.all(10),
             child: InputNumber(_userTry, fieldInputNumber),
           ),
-          Text("Intentos restantes: "),
-          CustomSlider(),
+          Text("Intentos restantes: $_userTries"),
+          CustomSlider(
+            _currentLevel, 
+            _currentLevelTitle, 
+            (value) =>  setState(() {
+                final int index = value.toInt();
+                _currentLevelTitle = levels[index];
+                _currentLevel = value;
+                _initializeGame(
+                  limit: _levelLimits[index], 
+                  tries: _tries[index], 
+                  levelTitle: _currentLevelTitle, 
+                  level: _currentLevel
+                );
+              })
+            ),
           const SizedBox(height: 30),
-          ColumnsContainer(tryHigher: _tryHigher, tryLower: _tryLower, history: _history)          
+          ColumnsContainer(
+            tryHigher: _tryHigher, 
+            tryLower: _tryLower, 
+            history: _history
+          )          
         ],
       ),
-      floatingActionButton: CustomButton(),
+      floatingActionButton: CustomButton( () {
+        setState(() {
+          _initializeGame(
+            limit: _currentLimit, 
+            tries: _tries[_currentLevel.toInt()], 
+            levelTitle: _currentLevelTitle, 
+            level: _currentLevel
+          );
+        });
+      }
+      ),
     );
   }
 }

@@ -1,1 +1,0 @@
-bool isValidNumber({required number, required limit}) => number > 0 && number <= limit; 
