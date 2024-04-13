@@ -27,7 +27,8 @@ class ColumnData extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Text(columnTitle),
+              const Padding(padding: EdgeInsets.all(5)),
+              Text(columnTitle, style: const TextStyle(fontWeight: FontWeight.bold),),
           
               // Columns "Mayor que" - "Menor que"
               if(win == null)  
