@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:guess_the_number/widgets/column_data.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -27,7 +28,18 @@ class MainScreen extends StatelessWidget {
             min: 0, 
             max: 10, 
             divisions: 3
+          ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ColumnData("Menor que", ["1", "2", "3"]),
+                ColumnData("Mayor que", ["5", "6", "7"]),
+                ColumnData("Historial", ["8", "9", "0"]),
+              ],
+            ),
           )
+          
         ],
       ),
     );
