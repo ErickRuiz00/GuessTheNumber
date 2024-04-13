@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class ColumnData extends StatelessWidget {
   final List<int> numbers;
   final String columnTitle;
+  final List<bool>? win;
 
   const ColumnData(
     this.columnTitle,
     this.numbers,
-    {super.key}
+    {super.key,
+    this.win}
   );
 
   @override
@@ -26,8 +28,18 @@ class ColumnData extends StatelessWidget {
           children: [
             Text(columnTitle),
 
-            for(int number in numbers)
-              Text(number.toString())
+            // Columns "Mayor que" - "Menor que"
+            if(win == null)  
+              for(int number in numbers)
+                Text(number.toString())
+
+            // Column "Historial"
+            else
+              for(int i = 0; i < numbers.length; i++)
+                  Text(
+                    numbers[i].toString(), 
+                    style: TextStyle(color: win![i]? Colors.green : Colors.red),
+                  )        
           ],
         ),
       ),

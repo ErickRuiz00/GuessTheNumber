@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:guess_the_number/widgets/column_data.dart';
 
 class ColumnsContainer extends StatelessWidget {
-  const ColumnsContainer({
-    super.key,
-    required List<int> tryHigher,
-    required List<int> tryLower,
-    required List<int> history,
-  }) : _tryHigher = tryHigher, _tryLower = tryLower, _history = history;
+  final List<int> _tryHigher, _tryLower, _history;
+  final List<bool>? win;
 
-  final List<int> _tryHigher;
-  final List<int> _tryLower;
-  final List<int> _history;
+  const ColumnsContainer(
+    this._tryHigher,
+    this._tryLower,
+    this._history, {
+    super.key, // Key should be declared separately
+    this.win,
+  }); // Super should be called like this
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class ColumnsContainer extends StatelessWidget {
         children: [
           ColumnData("Mayor que", _tryHigher),
           ColumnData("Menor que", _tryLower),
-          ColumnData("Historial", _history),
+          ColumnData("Historial", _history, win: win),
         ],
       ),
     );

@@ -85,7 +85,9 @@ class _MainScreenState extends State<MainScreen> {
     if(!isValidNumber(number: _userGuess, limit: _currentLimit)){
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Intenta un número entre [1-$_currentLimit]")
+          content: Text("Intenta un número entre [1-$_currentLimit]"),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 2),
         )
       );
       return;
@@ -138,11 +140,7 @@ class _MainScreenState extends State<MainScreen> {
               })
             ),
           const SizedBox(height: 30),
-          ColumnsContainer(
-            tryHigher: _tryHigher, 
-            tryLower: _tryLower, 
-            history: _history
-          )          
+          ColumnsContainer(_tryHigher,_tryLower, _history, win: win)          
         ],
       ),
       floatingActionButton: CustomButton( () {
