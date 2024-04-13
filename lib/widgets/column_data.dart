@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ColumnData extends StatelessWidget {
-  final List<String> numbers;
+  final List<int> numbers;
   final String columnTitle;
 
   const ColumnData(
@@ -26,7 +26,7 @@ class ColumnData extends StatelessWidget {
           children: [
             Text(columnTitle),
 
-            for(String number in numbers)
+            for(int number in numbers)
               Text(number.toString())
           ],
         ),
