@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:guess_the_number/screens/main_screen.dart';
+import 'package:guess_the_number/screens/home_screen.dart';
+import 'package:guess_the_number/screens/game_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: false,
         colorSchemeSeed: Colors.blueAccent
       ),
-      home: const MainScreen()
+      routes: {
+        "/":            (context) => const HomeScreen(),
+        "/gameScreen":  (context) => const GameScreen(),
+      },
     );
   }
 }

@@ -6,15 +6,15 @@ import 'package:guess_the_number/widgets/custom_button.dart';
 import 'package:guess_the_number/widgets/custom_slider.dart';
 import 'package:guess_the_number/widgets/input_number.dart';
 
-class MainScreen extends StatefulWidget {
+class GameScreen extends StatefulWidget {
   
-  const MainScreen({super.key});
+  const GameScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<GameScreen> createState() => _GameScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _GameScreenState extends State<GameScreen> {
   late int _targetNumber;
   late int _userGuess, _userTries, _currentLimit;
   final List<int> _tries = [5, 8, 15, 25], _levelLimits = [10, 20, 100, 1000]; 
@@ -25,7 +25,9 @@ class _MainScreenState extends State<MainScreen> {
   final fieldInputNumber = TextEditingController(); 
   late List<bool> win;
 
-   @override
+  late bool _hasCredits;
+
+  @override
   void initState(){
     super.initState();
     _initializeGame(
@@ -35,16 +37,17 @@ class _MainScreenState extends State<MainScreen> {
       level: 0
     );
 
+
     _history = [];
     win = [];
   }
 
-  void _initializeGame({
+  Future<void> _initializeGame({
     required int limit,
     required int tries,
     required String levelTitle,
     required double level
-  }){
+  }) async {
     _targetNumber = Random().nextInt(limit) + 1;
     _currentLimit = limit;
     _userTries = tries;
@@ -52,6 +55,7 @@ class _MainScreenState extends State<MainScreen> {
     _currentLevel = level;
     _tryLower = [];
     _tryHigher = [];
+    _hasCredits = false;
   }
 
   bool isValidNumber({required int number, required int limit}) => number > 0 && number <= limit; 
@@ -110,9 +114,44 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
- 
+  void _logout(){
+    Navigator.popUntil(context, ModalRoute.withName("/"));
+  }
+
+
+  Future<void> _showCoinDialog(BuildContext context) {
+    return showDialog(
+      context: context, 
+      builder: (BuildContext context) => CoinDialog((){
+        setState(() {
+          _hasCredits = true;
+          print("Llegue");
+        });
+      })
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
+    // if(!_hasCredits){
+    //   _showCoinDialog(context);
+    // }
+    if(!_hasCredits){
+      return (
+        Scaffold(
+          body: Column(
+            children: [
+              FloatingActionButton(onPressed: () => setState(() {
+                _hasCredits= true;
+              })),
+              const Text("Working")
+            ]
+            ),
+        )
+        );
+
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Center(child: Text("Adivina el número")),
@@ -143,18 +182,39 @@ class _MainScreenState extends State<MainScreen> {
           ColumnsContainer(_tryHigher,_tryLower, _history, win: win)          
         ],
       ),
-      floatingActionButton: CustomButton( () {
-        setState(() {
-          _initializeGame(
-            limit: _currentLimit, 
-            tries: _tries[_currentLevel.toInt()], 
-            levelTitle: _currentLevelTitle, 
-            level: _currentLevel
-          );
-        });
-      }
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              onPressed: () => _logout(),
+              child: const Icon(Icons.logout),
+            ),
+            
+        ],
       ),
     );
   }
 }
 
+
+ class CoinDialog extends StatelessWidget {
+  final VoidCallback? updateCredits;
+
+  const CoinDialog(this.updateCredits, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Insert coin"),
+      actions: [
+        TextButton(
+          onPressed: (){
+            updateCredits;
+            Navigator.of(context).pop();
+          },
+          child: const Icon(Icons.account_box_outlined)
+        )
+      ],
+    );
+  }
+}

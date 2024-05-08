@@ -16,13 +16,15 @@ class ColumnsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(child: ColumnData("Mayor que", _tryHigher)),
-        Expanded(child: ColumnData("Menor que", _tryLower)),
-        Expanded(child: ColumnData("Historial", _history, win: win)),
-      ],
+    return Expanded(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(child: ColumnData("Mayor que", _tryHigher)),
+          Expanded(child: ColumnData("Menor que", _tryLower)),
+          Expanded(child: ColumnData("Historial", _history, win: win)),
+        ],
+      ),
     );
   }
 }
